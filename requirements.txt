@@ -1,0 +1,11 @@
+flask
+
+flask-sqlalchemy
+Flask-WTF
+flask-migrate
+
+gunicorn
+
+pytest
+pytest-flask
+pytest-cov

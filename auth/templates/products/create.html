@@ -1,0 +1,12 @@
+{% from "_formhelpers.html" import render_field %}
+{% extends "base_layout.html" %}
+{% block title %} New Product {% endblock %}
+{% block content %}
+<div class="container">
+  <form method="POST">
+    {{ render_field(form.name) }}
+    {{ render_field(form.description) }}
+    <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+</div>
+{% endblock %}
