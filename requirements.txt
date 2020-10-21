@@ -3,6 +3,8 @@ flask
 flask-sqlalchemy
 Flask-WTF
 flask-migrate
+PyJWT
+Flask-RESTful
 
 gunicorn
 
