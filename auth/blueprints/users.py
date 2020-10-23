@@ -1,4 +1,4 @@
-from flask import Blueprint, request, make_response,jsonify
+from flask import Blueprint, request, make_response,jsonify, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from auth.models import User
 from auth.extensions import db
@@ -12,7 +12,7 @@ users = Blueprint('users', __name__)
 
 @users.route('/signup', methods=['POST'])
 def signup():
-  data = request.args
+  data = request.form
   email, password = data.get('email'), data.get('password')
   user = User.query.filter_by(email=email).first()
 
@@ -32,3 +32,24 @@ def signup():
   else:
       response = jsonify({'code': 400, 'message': 'email already exists'})
       return make_response(response)
+
+@users.route('/login', methods=['POST'])
+def login():
+  data = request.form
+  if not data or not data.get('email') or not data.get('password'):
+    response = jsonify({'code': 400, 'message': 'Both email and password are required'})
+    
+  user = User.query.filter_by(email=data.get('email')).first()
+  if not user:
+    response = jsonify({'code': 400, 'message': 'Wrong email, please try again...'})
+  
+  if check_password_hash(user.password, data.get('password')):
+        # generates the JWT Token
+        token = jwt.encode({
+            'public_id': user.public_id,
+            'exp': datetime.utcnow() + timedelta(minutes=30)
+        }, current_app.config['SECRET_KEY'])
+
+        return make_response(jsonify({'token': token.decode('UTF-8'), 'exp': datetime.utcnow() + timedelta(minutes=30)}), 201)
+  return make_response(jsonify({'code': 400, 'message': 'Wrong password, please try again'}))
+  
