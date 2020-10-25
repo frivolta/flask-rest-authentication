@@ -10,6 +10,37 @@ from functools import wraps
 
 users = Blueprint('users', __name__)
 
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+        # jwt is passed in the request header
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+        # return 401 if token is not passed
+        if not token:
+            response = jsonify({'code': 401, 'message': 'Token is missing'})
+            return response
+
+        try:
+            # decoding the payload to fetch the stored details
+            data = jwt.decode(token, current_app.config['SECRET_KEY'])
+            current_user = User.query.filter_by(public_id=data['public_id']).first()
+        except:
+            response = jsonify({'code': 401, 'message': 'Token is invalid'})
+            return response
+        # returns the current logged in users contex to the routes
+        return f(current_user, *args, **kwargs)
+
+    return decorated
+
+@users.route('/private', methods=['GET'])
+@token_required
+def get_all_users(current_user):
+    return jsonify({'private': "correctly logged in"})
+
+
 @users.route('/signup', methods=['POST'])
 def signup():
   data = request.form
