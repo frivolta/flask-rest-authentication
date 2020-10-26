@@ -5,6 +5,7 @@ import auth.models
 
 from auth.blueprints.products import products
 from auth.blueprints.users import users
+from auth.blueprints.budgets import budgets
 
 
 def create_app(environment_name='dev'):
@@ -15,4 +16,5 @@ def create_app(environment_name='dev'):
     migrate.init_app(app, db, render_as_batch=True)
     app.register_blueprint(products, url_prefix="/product")
     app.register_blueprint(users)
+    app.register_blueprint(budgets)
     return app

@@ -1,6 +1,6 @@
 from flask import Blueprint, request, make_response,jsonify, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
-from auth.models import User
+from auth.models import User, Budget
 from auth.extensions import db
 from auth.forms import ProductForm
 import uuid
@@ -40,7 +40,7 @@ def token_required(f):
 def get_all_users(current_user):
     return jsonify({'private': "correctly logged in"})
 
-
+"""When signup add default budget"""
 @users.route('/signup', methods=['POST'])
 def signup():
   data = request.form
@@ -51,6 +51,9 @@ def signup():
     try:
         user = User(public_id=str(uuid.uuid4()),email=email,password=generate_password_hash(password))
         db.session.add(user)
+        db.session.commit()
+        budget = Budget(user_id=user.id)
+        db.session.add(budget)
         db.session.commit()
 
         response = jsonify({'public_id': user.public_id,'email': user.email})
