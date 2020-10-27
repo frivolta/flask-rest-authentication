@@ -47,8 +47,6 @@ def signup():
     except AssertionError as err:
         response = jsonify({'code': 400, 'message': str(err)})
         return make_response(response)
-
-
   else:
       response = jsonify({'code': 400, 'message': 'email already exists'})
       return make_response(response)

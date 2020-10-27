@@ -1,5 +1,6 @@
 
 from sqlalchemy.orm import validates
+from datetime import date
 from auth.extensions import db
 
 class Product(db.Model):
@@ -30,6 +31,7 @@ class User(db.Model):
 class Budget(db.Model):
     __tablename__ = 'budget'
     id = db.Column(db.Integer, primary_key=True)
+    is_active = db.Column(db.Boolean,nullable=False, default=False)
     needs = db.Column(db.Integer,nullable=False, default=70)
     wants = db.Column(db.Integer,nullable=False, default=30)
     savings = db.Column(db.Integer,nullable=False, default=20)
@@ -70,3 +72,20 @@ class Category(db.Model):
             raise AssertionError("Not valid budget type: use 'savings' or 'wants' or 'needs'")
         return budget_type
 
+
+class Expense(db.Model):
+    __tablename__ = 'expense'
+    id = db.Column(db.Integer, primary_key=True)
+    amount = db.Column(db.String(32),nullable=False)
+    expense_type = db.Column(db.String(32),nullable=False)
+    budget_type = db.Column(db.String(32),nullable=False)
+    description = db.Column(db.String(120),nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.public_id'))
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    date = db.Column(db.Date, nullable=False,default=date)
+    
+    user = db.relationship("User", uselist=False)
+    category = db.relationship("Category", uselist=False)
+
+    def __repr__(self):
+        return '<Expense {}>'.format(self.body)
