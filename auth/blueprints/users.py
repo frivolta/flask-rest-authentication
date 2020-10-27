@@ -1,12 +1,13 @@
 from flask import Blueprint, request, make_response,jsonify, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
-from auth.models import User, Budget
+from auth.models import User, Budget, Category
 from auth.extensions import db
 from auth.forms import ProductForm
 import uuid
 import jwt
 from datetime import datetime, timedelta
 from auth.helpers import token_required
+from auth.seed.initial_data import initial_categories
 
 users = Blueprint('users', __name__)
 
@@ -23,17 +24,28 @@ def signup():
 
   if not user:
     try:
-        user = User(public_id=str(uuid.uuid4()),email=email,password=generate_password_hash(password))
+        public_user_id=str(uuid.uuid4())
+        user = User(public_id=public_user_id ,email=email,password=generate_password_hash(password))
         db.session.add(user)
-        db.session.commit()
-        budget = Budget(user_id=user.id)
+        budget = Budget(user_id=public_user_id)
         db.session.add(budget)
+        cat = {
+          "id": 1,
+          "expenseType": "expense",
+          "budgetType": "needs",
+          "value": "groceries",
+          "caption": "Groceries",
+          "color": "#0de2a3",
+        }
+        
+        new_category = Category(expense_type = "expense", budget_type="needs", value="groceries", caption="Groceries", color="#11111", user_id=public_user_id)
+        db.session.add(new_category)
+        
         db.session.commit()
-
         response = jsonify({'public_id': user.public_id,'email': user.email})
         return make_response(response, 200)
-    except:
-        response = jsonify({'code': 400, 'message': 'Generic error'})
+    except AssertionError as err:
+        response = jsonify({'code': 400, 'message': str(err)})
         return make_response(response)
 
 
