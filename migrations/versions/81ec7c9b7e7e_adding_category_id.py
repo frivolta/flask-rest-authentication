@@ -1,8 +1,8 @@
-"""adding expense model
+"""adding category id
 
-Revision ID: 82e8f244254a
+Revision ID: 81ec7c9b7e7e
 Revises: 
-Create Date: 2020-10-27 21:33:27.086085
+Create Date: 2020-10-28 09:52:52.072774
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '82e8f244254a'
+revision = '81ec7c9b7e7e'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -45,6 +45,7 @@ def upgrade():
     )
     op.create_table('category',
     sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('category_id', sa.Integer(), nullable=False),
     sa.Column('expense_type', sa.String(length=32), nullable=False),
     sa.Column('budget_type', sa.String(length=32), nullable=False),
     sa.Column('value', sa.String(length=32), nullable=False),

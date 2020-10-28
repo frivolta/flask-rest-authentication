@@ -6,6 +6,7 @@ import auth.models
 from auth.blueprints.products import products
 from auth.blueprints.users import users
 from auth.blueprints.budgets import budgets
+from auth.blueprints.categories import categories
 
 
 def create_app(environment_name='dev'):
@@ -17,4 +18,5 @@ def create_app(environment_name='dev'):
     app.register_blueprint(products, url_prefix="/product")
     app.register_blueprint(users)
     app.register_blueprint(budgets)
+    app.register_blueprint(categories)
     return app

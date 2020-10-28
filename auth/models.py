@@ -46,8 +46,9 @@ class Budget(db.Model):
 class Category(db.Model):
     __tablename__ = 'category'
     id = db.Column(db.Integer, primary_key=True)
+    category_id = db.Column(db.Integer, nullable=False)
     expense_type = db.Column(db.String(32),nullable=False)
-    budget_type = db.Column(db.String(32),nullable=False)
+    budget_type = db.Column(db.String(32),nullable=True)
     value = db.Column(db.String(32),nullable=False)
     caption = db.Column(db.String(32),nullable=False)
     color = db.Column(db.String(32),nullable=False)
