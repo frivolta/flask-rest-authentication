@@ -20,4 +20,5 @@ def create_app(environment_name='dev'):
     app.register_blueprint(users)
     app.register_blueprint(budgets)
     app.register_blueprint(categories)
+    app.register_blueprint(expenses)
     return app

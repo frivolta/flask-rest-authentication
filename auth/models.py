@@ -1,6 +1,6 @@
 
 from sqlalchemy.orm import validates
-from datetime import date
+import datetime
 from auth.extensions import db
 
 
@@ -38,7 +38,7 @@ class Budget(db.Model):
     needs = db.Column(db.Integer, nullable=False, default=70)
     wants = db.Column(db.Integer, nullable=False, default=30)
     savings = db.Column(db.Integer, nullable=False, default=20)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.public_id'))
+    user_id = db.Column(db.String(50), db.ForeignKey('user.public_id'))
 
     user = db.relationship("User", uselist=False)
 
@@ -55,7 +55,7 @@ class Category(db.Model):
     value = db.Column(db.String(32), nullable=False)
     caption = db.Column(db.String(32), nullable=False)
     color = db.Column(db.String(32), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.public_id'))
+    user_id = db.Column(db.String(50), db.ForeignKey('user.public_id'))
 
     user = db.relationship("User", uselist=False)
 
@@ -86,9 +86,9 @@ class Expense(db.Model):
     expense_type = db.Column(db.String(32), nullable=False)
     budget_type = db.Column(db.String(32), nullable=False)
     description = db.Column(db.String(120), nullable=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.public_id'))
+    user_id = db.Column(db.String(50), db.ForeignKey('user.public_id'))
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
-    date = db.Column(db.Date, nullable=False, default=date)
+    date = db.Column(db.Date, nullable=False, default=datetime.datetime.utcnow)
 
     user = db.relationship("User", uselist=False)
     category = db.relationship("Category", uselist=False)
