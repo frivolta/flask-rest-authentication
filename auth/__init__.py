@@ -7,6 +7,7 @@ from auth.blueprints.products import products
 from auth.blueprints.users import users
 from auth.blueprints.budgets import budgets
 from auth.blueprints.categories import categories
+from auth.blueprints.expenses import expenses
 
 
 def create_app(environment_name='dev'):
