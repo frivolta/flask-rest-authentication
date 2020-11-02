@@ -22,10 +22,6 @@ class TestConfig(BaseConfig):
 class ProdConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///prod.db'
     DEBUG = False
-    SESSION_PROTECTION = "strong"
-    SESSION_COOKIE_SECURE = True
-    REMEMBER_COOKIE_SECURE = True
-    ASSETS_DEBUG = False
 
 
 configurations = {
