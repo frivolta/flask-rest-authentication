@@ -21,6 +21,11 @@ def get_all_users(current_user):
 """ @ToDo: Extract in model methods """
 
 
+@users.route('/test', methods=['GET'])
+def test_route():
+    return make_response(jsonify({"working": "server is responding"}), 200)
+
+
 @users.route('/signup', methods=['POST'])
 def signup():
     data = request.form
